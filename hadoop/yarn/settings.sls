@@ -17,7 +17,7 @@
 {%- set targeting_method            = salt['grains.get']('hadoop:targeting_method', salt['pillar.get']('hadoop:targeting_method', 'grain')) %}
 {%- set resourcemanager_host        = salt['mine.get'](resourcemanager_target, 'network.interfaces', expr_form=targeting_method)|first() %}
 
-{%- set local_disks                 = salt['grains.get']('yarn_data_disks', ['/yarn_data']) %}
+{%- set local_disks                 = salt['grains.get']('yarn_data_disks', pc.get('data_disks', ['/yarn_data'])) %}
 {%- set config_yarn_site            = gc.get('yarn-site', pc.get('yarn-site', {})) %}
 {%- set config_capacity_scheduler   = gc.get('capacity-scheduler', pc.get('capacity-scheduler', {})) %}
 # these are system accounts blacklisted with the YARN LCE
