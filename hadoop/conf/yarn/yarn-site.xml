@@ -47,7 +47,7 @@
         <value>0.0.0.0:{{ yarn.nodemanager_localizer_port }}</value>
     </property>
 
-{%- if mapred.jobtracker_host is defined %}
+{%- if mapred.jobtracker_host is not defined %}
     <property>
         <name>yarn.log.server.url</name>
         <value>http://{{ mapred.jobtracker_host }}:{{ mapred.jobhistory_webapp_port }}/jobhistory/logs/</value>
