@@ -22,14 +22,14 @@
 
 # sanitize targeting results - these come as arrays, so we always pick the first
 {%- if namenode_count > 0 %}
-{%- set namenode_host = namenode_host|first()|join() %}
+{%- set namenode_host = namenode_host|first()|join()|default('') %}
 {%- endif %}
 
 {%- if primary_namenode_host|count() > 0 %}
-  {%- set primary_namenode_host = primary_namenode_host|first() %}
+  {%- set primary_namenode_host = primary_namenode_host|first()|default('') %}
   {%- set namenode_hosts = [primary_namenode_host] %}
   {%- if secondary_namenode_host|count() > 0 %}
-    {%- set secondary_namenode_host = secondary_namenode_host|first() %}
+    {%- set secondary_namenode_host = secondary_namenode_host|first()|default('') %}
     {%- set namenode_hosts      = [primary_namenode_host,secondary_namenode_host] %}
   {%- endif %}
 {%- endif %}
@@ -59,7 +59,7 @@
 {%- set quorum_connection_string = "" %}
 {%- endif %}
 # Todo: this might be a candidate for pillars/grains
-# {%- set tmp_root        = local_disks|first() %}
+# {%- set tmp_root        = local_disks|first()|default('') %}
 {%- set tmp_dir         = '/tmp' %}
 
 {%- set replicas = gc.get('replication', pc.get('replication', datanode_count % 4 if datanode_count < 4 else 3 )) %}

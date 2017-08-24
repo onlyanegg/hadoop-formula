@@ -15,7 +15,7 @@
 {%- set nodemanager_target          = g.get('nodemanager_target', p.get('nodemanager_target', 'roles:hadoop_slave')) %}
 # this is a deliberate duplication as to not re-import hadoop/settings multiple times
 {%- set targeting_method            = salt['grains.get']('hadoop:targeting_method', salt['pillar.get']('hadoop:targeting_method', 'grain')) %}
-{%- set resourcemanager_host        = salt['mine.get'](resourcemanager_target, 'network.interfaces', expr_form=targeting_method)|first() %}
+{%- set resourcemanager_host        = salt['mine.get'](resourcemanager_target, 'network.interfaces', expr_form=targeting_method)|first()|default('') %}
 
 {%- set local_disks                 = salt['grains.get']('yarn_data_disks', pc.get('data_disks', ['/yarn_data'])) %}
 {%- set config_yarn_site            = gc.get('yarn-site', pc.get('yarn-site', {})) %}
@@ -37,7 +37,7 @@
                      'nodemanager_webapp_port'     : nodemanager_webapp_port,
                      'nodemanager_localizer_port'  : nodemanager_localizer_port,
                      'local_disks'                 : local_disks,
-                     'first_local_disk'            : local_disks|sort()|first(),
+                     'first_local_disk'            : local_disks|sort()|first()|default(''),
                      'config_yarn_site'            : config_yarn_site,
                      'config_capacity_scheduler'   : config_capacity_scheduler,
                      'banned_users'                : banned_users,
