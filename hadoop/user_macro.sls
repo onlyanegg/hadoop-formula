@@ -21,6 +21,7 @@
 #      - /var/run/hadoop/{{ username }}
 #      - /var/lib/hadoop/{{ username }}
 
+  {%- if hadoop.configure_ssh %}
 {{ userhome }}/.ssh:
   file.directory:
     - user: {{ username }}
@@ -65,6 +66,7 @@ ssh_dss_{{ username }}:
     - mode: 644
     - require:
       - file: {{ userhome }}/.ssh
+  {%- endif %}
 
 {{ userhome }}/.bashrc:
   file.append:

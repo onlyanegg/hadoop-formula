@@ -77,37 +77,6 @@ fix-executor-permissions:
 
 {% if yarn.is_resourcemanager %}
 
-# add mr-history directories for Hadoop 2
-{%- set yarn_site = yarn.config_yarn_site %}
-{%- set rald = yarn_site.get('yarn.nodemanager.remote-app-log-dir', '/app-logs') %}
-
-{% if 'hdfs' in hadoop.enabled_services %}
-{{ hdfs_mkdir(mapred.history_dir, username, username, 755, hadoop.dfs_cmd) }}
-{{ hdfs_mkdir(mapred.history_intermediate_done_dir, username, username, 1777, hadoop.dfs_cmd) }}
-{{ hdfs_mkdir(mapred.history_done_dir, username, username, 1777, hadoop.dfs_cmd) }}
-{{ hdfs_mkdir(yarn_home_directory, username, username, 700, hadoop.dfs_cmd) }}
-{{ hdfs_mkdir(rald, username, 'hadoop', 1777, hadoop.dfs_cmd) }}
-{% endif %}
-
-{% if 'history' in hadoop.enabled_services %}
-/etc/init.d/hadoop-historyserver:
-  file.managed:
-    - source: salt://hadoop/files/{{ hadoop.initscript }}
-    - user: root
-    - group: root
-    - mode: '755'
-    - template: jinja
-    - context:
-      hadoop_svc: historyserver
-      hadoop_user: hdfs
-      hadoop_major: {{ hadoop.major_version }}
-      hadoop_home: {{ hadoop.alt_home }}
-
-hadoop-historyserver:
-  service.running:
-    - enable: True
-{% endif %}
-
 /etc/init.d/hadoop-resourcemanager:
   file.managed:
     - source: salt://hadoop/files/{{ hadoop.initscript }}
