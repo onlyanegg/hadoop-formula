@@ -3,6 +3,11 @@
 hadoop:
   version: apache-1.2.1 # ['apache-1.2.1', 'apache-2.2.0', 'hdp-1.3.0', 'hdp-2.2.0', 'cdh-4.5.0', 'cdh-4.5.0-mr1']
   targeting_method: grain # [compound, glob] also supported
+  enabled_services:
+    - hdfs
+    - mapred
+    - yarn
+    - history
   users:
     hadoop: 6000
     hdfs: 6001

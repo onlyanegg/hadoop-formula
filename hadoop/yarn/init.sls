@@ -81,7 +81,7 @@ fix-executor-permissions:
 {%- set yarn_site = yarn.config_yarn_site %}
 {%- set rald = yarn_site.get('yarn.nodemanager.remote-app-log-dir', '/app-logs') %}
 
-{% if hdfs.enabled | default(False) %}
+{% if 'hdfs' in hadoop.enabled_services %}
 {{ hdfs_mkdir(mapred.history_dir, username, username, 755, hadoop.dfs_cmd) }}
 {{ hdfs_mkdir(mapred.history_intermediate_done_dir, username, username, 1777, hadoop.dfs_cmd) }}
 {{ hdfs_mkdir(mapred.history_done_dir, username, username, 1777, hadoop.dfs_cmd) }}
@@ -89,7 +89,7 @@ fix-executor-permissions:
 {{ hdfs_mkdir(rald, username, 'hadoop', 1777, hadoop.dfs_cmd) }}
 {% endif %}
 
-{% if hadoop.history.enabled | default(False) %}
+{% if 'history' in hadoop.enabled_services %}
 /etc/init.d/hadoop-historyserver:
   file.managed:
     - source: salt://hadoop/files/{{ hadoop.initscript }}
